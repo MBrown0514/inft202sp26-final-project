@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% macro result_table(rows) %}
+<div class="table-wrap">
+    <table>
+        <thead>
+            <tr>
+                {% for column in rows[0].keys() %}
+                    <th>{{ column.replace("_", " ").title() }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in rows %}
+            <tr>
+                {% for value in row.values() %}
+                    <td>{{ "{:,}".format(value|int) if value.__class__.__name__ == "Decimal" else value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endmacro %}
+
+{% block content %}
+<h1>Artist Insights</h1>
+<p class="lede">Two student-led questions answered with SQL and explained in plain language.</p>
+
+<section class="card section">
+    <h2>Which 10 artists have the most total streams across all their tracks?</h2>
+    <div class="callout">{{ explanation_1 }}</div>
+    {{ result_table(discussion_1) }}
+</section>
+
+<section class="card section">
+    <h2>What are The Weeknd's top 3 most-streamed songs?</h2>
+    <div class="callout">{{ explanation_2 }}</div>
+    {{ result_table(discussion_2) }}
+</section>
+{% endblock %}

@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ title or "Spotify Streams Dashboard" }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --dark-blue: #0C2255;
+            --blue: #005DAA;
+            --orange: #F26822;
+            --ink: #182033;
+            --muted: #657084;
+            --line: #D9E2EF;
+            --bg: #F4F7FB;
+            --card: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            color: var(--ink);
+            background: var(--bg);
+        }
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--dark-blue);
+            color: white;
+            border-bottom: 4px solid var(--orange);
+        }
+
+        .nav-inner {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-weight: 800;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            padding: 8px 10px;
+            border-radius: 6px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 28px 20px 48px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            color: var(--dark-blue);
+            font-size: 34px;
+            line-height: 1.1;
+        }
+
+        h2 {
+            color: var(--dark-blue);
+            font-size: 22px;
+            margin: 0 0 14px;
+        }
+
+        .lede {
+            margin: 0 0 24px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin: 24px 0;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 18px;
+            box-shadow: 0 10px 25px rgba(12, 34, 85, 0.06);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: var(--blue);
+            font-size: 28px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .chart-box {
+            min-height: 280px;
+        }
+
+        .chart-box canvas {
+            max-height: 220px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            font-size: 14px;
+            vertical-align: top;
+        }
+
+        th {
+            color: var(--dark-blue);
+            background: #EAF1FA;
+            font-weight: 800;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        input[type="search"] {
+            flex: 1;
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 11px 12px;
+            font: inherit;
+        }
+
+        button, .button {
+            border: 0;
+            background: var(--orange);
+            color: white;
+            padding: 11px 14px;
+            border-radius: 6px;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .pager {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .callout {
+            border-left: 5px solid var(--orange);
+            background: #FFF6F0;
+            padding: 14px 16px;
+            border-radius: 6px;
+            margin: 12px 0 18px;
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-top: 26px;
+        }
+
+        @media (max-width: 760px) {
+            .grid, .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-inner">
+            <div class="brand">Spotify Streams</div>
+            <div class="nav-links">
+                <a href="/">Dashboard</a>
+                <a href="/browse">Browse</a>
+                <a href="/insights">Insights</a>
+            </div>
+        </div>
+    </nav>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
