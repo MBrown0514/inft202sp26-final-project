@@ -1,4 +1,4 @@
-# Schema Plan: Spotify Most Streamed Songs
+# Schema Plan: Spotify Most Streamed Songs and Artists of 2023
 
 ## Dataset Focus
 

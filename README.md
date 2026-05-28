@@ -1,14 +1,14 @@
-# Spotify Most Streamed Songs Database Project
+# Spotify Most Streamed Songs and Artists of 2023
 
 ## Project Overview
 
-This project uses a Spotify most-streamed songs CSV dataset to explore artists, songs, streaming totals, and music features. The data includes track names, artist names, release information, stream counts, playlist/chart appearances, and audio details such as BPM, song key, and mode.
+This project uses a Spotify most-streamed songs and artists of 2023 CSV dataset to explore artists, songs, streaming totals, and music features. The data includes track names, artist names, release information, stream counts, playlist/chart appearances, and audio details such as BPM, song key, and mode.
 
 The main focus of this project is artists. I used PostgreSQL to organize the dataset into related tables, wrote SQL queries to analyze artist performance, and built a Flask dashboard to display the results.
 
 ## Dataset
 
-- Dataset name: Spotify Most Streamed Songs
+- Dataset name: Spotify Most Streamed Songs and Artists of 2023
 - Source file: `Spotify Most Streamed Songs.csv`
 - Rows imported: 953
 
