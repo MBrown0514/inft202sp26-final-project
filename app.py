@@ -101,7 +101,7 @@ def browse():
         SELECT track_id, track_name, artist_name, release_year, release_month, release_day, streams
         FROM tracks
         {where}
-        ORDER BY track_id
+        ORDER BY streams DESC NULLS LAST
         LIMIT %s OFFSET %s
         """,
         params + [per_page, offset],
