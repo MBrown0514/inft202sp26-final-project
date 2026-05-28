@@ -1,4 +1,4 @@
-SELECT artist_name, SUM(streams)
+SELECT artist_name, SUM(streams) AS total_streams
 FROM tracks
 GROUP BY artist_name
 HAVING SUM(streams) IS NOT NULL
