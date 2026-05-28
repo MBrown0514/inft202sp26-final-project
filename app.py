@@ -86,6 +86,7 @@ def index():
 def browse():
     page = max(request.args.get("page", 1, type=int), 1)
     search = request.args.get("q", "").strip()
+    sort = request.args.get("sort", "streams")
     per_page = 25
     offset = (page - 1) * per_page
 
@@ -95,13 +96,15 @@ def browse():
         where = "WHERE track_name ILIKE %s OR artist_name ILIKE %s"
         params.extend([f"%{search}%", f"%{search}%"])
 
+    order_by = "track_id" if sort == "track_id" else "streams DESC NULLS LAST"
+
     total = fetch_one(f"SELECT COUNT(*) AS value FROM tracks {where}", params)["value"]
     rows = fetch_all(
         f"""
         SELECT track_id, track_name, artist_name, release_year, release_month, release_day, streams
         FROM tracks
         {where}
-        ORDER BY streams DESC NULLS LAST
+        ORDER BY {order_by}
         LIMIT %s OFFSET %s
         """,
         params + [per_page, offset],
@@ -112,6 +115,7 @@ def browse():
         "browse.html",
         rows=rows,
         search=search,
+        sort=sort,
         page=page,
         pages=pages,
         total=total,

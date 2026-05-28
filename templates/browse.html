@@ -6,8 +6,15 @@
 
 <form class="search-form" method="get">
     <input type="search" name="q" value="{{ search }}" placeholder="Search tracks or artists">
+    <input type="hidden" name="sort" value="{{ sort }}">
     <button type="submit">Search</button>
 </form>
+
+<div class="sort-options">
+    <span class="stat-label">Sort by</span>
+    <a class="button {{ 'active' if sort != 'track_id' else '' }}" href="/browse?q={{ search }}&sort=streams">Most Streamed</a>
+    <a class="button {{ 'active' if sort == 'track_id' else '' }}" href="/browse?q={{ search }}&sort=track_id">Track ID</a>
+</div>
 
 <p class="lede">{{ "{:,}".format(total) }} matching tracks</p>
 
@@ -40,10 +47,10 @@
     <div>Page {{ page }} of {{ pages }}</div>
     <div>
         {% if page > 1 %}
-            <a class="button" href="/browse?page={{ page - 1 }}&q={{ search }}">Previous</a>
+            <a class="button" href="/browse?page={{ page - 1 }}&q={{ search }}&sort={{ sort }}">Previous</a>
         {% endif %}
         {% if page < pages %}
-            <a class="button" href="/browse?page={{ page + 1 }}&q={{ search }}">Next</a>
+            <a class="button" href="/browse?page={{ page + 1 }}&q={{ search }}&sort={{ sort }}">Next</a>
         {% endif %}
     </div>
 </div>
