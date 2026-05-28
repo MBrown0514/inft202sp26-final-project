@@ -29,14 +29,14 @@
         <canvas id="artistCountChart"></canvas>
     </div>
     <div class="card chart-box">
-        <h2>Highest Average Streams</h2>
-        <canvas id="avgStreamsChart"></canvas>
+        <h2>Top Artists by Total Streams</h2>
+        <canvas id="totalStreamsChart"></canvas>
     </div>
 </section>
 
 <script>
 const artistCounts = {{ artist_counts|tojson }};
-const avgStreams = {{ avg_streams|tojson }};
+const totalStreams = {{ total_streams|tojson }};
 
 new Chart(document.getElementById("artistCountChart"), {
     type: "bar",
@@ -49,28 +49,42 @@ new Chart(document.getElementById("artistCountChart"), {
         }]
     },
     options: {
+        indexAxis: "y",
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: { x: { ticks: { maxRotation: 60, minRotation: 30 } } }
+        scales: {
+            x: {
+                ticks: {
+                    precision: 0
+                }
+            }
+        }
     }
 });
 
-new Chart(document.getElementById("avgStreamsChart"), {
+new Chart(document.getElementById("totalStreamsChart"), {
     type: "bar",
     data: {
-        labels: avgStreams.map(row => row.artist_name),
+        labels: totalStreams.map(row => row.artist_name),
         datasets: [{
-            label: "Average streams",
-            data: avgStreams.map(row => row.average_streams),
+            label: "Total streams",
+            data: totalStreams.map(row => row.total_streams),
             backgroundColor: "#F26822"
         }]
     },
     options: {
+        indexAxis: "y",
         responsive: true,
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
-        scales: { x: { ticks: { maxRotation: 60, minRotation: 30 } } }
+        scales: {
+            x: {
+                ticks: {
+                    callback: value => Number(value).toLocaleString()
+                }
+            }
+        }
     }
 });
 </script>

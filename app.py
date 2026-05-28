@@ -63,13 +63,13 @@ def index():
         """
     )
 
-    avg_streams = fetch_all(
+    total_streams = fetch_all(
         """
-        SELECT artist_name, ROUND(AVG(streams)) AS average_streams
+        SELECT artist_name, SUM(streams) AS total_streams
         FROM tracks
         WHERE streams IS NOT NULL
         GROUP BY artist_name
-        ORDER BY AVG(streams) DESC
+        ORDER BY SUM(streams) DESC
         LIMIT 10
         """
     )
@@ -78,7 +78,7 @@ def index():
         "index.html",
         stats=stats,
         artist_counts=artist_counts,
-        avg_streams=avg_streams,
+        total_streams=total_streams,
     )
 
 
